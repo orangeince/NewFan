@@ -15,6 +15,28 @@ routes.add(method: .get, uri: "/", handler: {
 }
 )
 
+routes.add(method: .post, uri: "/fan/", handler: {
+    request, response in
+    if let bodyStr = request.postBodyString {
+        if let json = (try? bodyStr.jsonDecode()) as? [String: Any] {
+            print("Post json correct! ^_^")
+            if let text = json["text"] as? String, let userName = json["user_name"] as? String {
+                let responseString = FanWaiter.handleFanPlanWith(commandStr: text, userName: userName)
+                response.appendBody(string: "{\"text\": \"\(responseString)\"}")
+            } else {
+                print("Data paramaters invaild!")
+                response.appendBody(string: "Data invaild!")
+            }
+        } else {
+            print("Post json invaild!")
+            response.appendBody(string: "post params invaild!")
+        }
+    } else {
+        print("No post body...")
+    }
+    response.completed()
+})
+
 // Add the routes to the server.
 server.addRoutes(routes)
 
