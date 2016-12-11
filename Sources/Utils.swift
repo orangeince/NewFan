@@ -9,10 +9,10 @@
 import Foundation
 
 struct RegexHelper {
-    let regex: NSRegularExpression
+    let regex: RegularExpression
     
     init(_ pattern: String) throws {
-        try regex = NSRegularExpression(pattern: pattern, options: [])
+        try regex = RegularExpression(pattern: pattern, options: [])
     }
     
     func match(input: String) -> Bool {
