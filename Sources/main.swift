@@ -1,6 +1,8 @@
+import Foundation
 import PerfectLib
 import PerfectHTTP
 import PerfectHTTPServer
+import PerfectCURL
 
 // Create HTTP server.
 let server = HTTPServer()
@@ -18,6 +20,7 @@ routes.add(method: .get, uri: "/", handler: {
 routes.add(method: .post, uri: "/fan/", handler: {
     request, response in
     if let bodyStr = request.postBodyString {
+        print("body: \(bodyStr)")
         if let json = (try? bodyStr.jsonDecode()) as? [String: Any] {
             print("Post json correct! ^_^")
             if let text = json["text"] as? String, let userName = json["user_name"] as? String {
@@ -40,8 +43,26 @@ routes.add(method: .post, uri: "/fan/", handler: {
 // Add the routes to the server.
 server.addRoutes(routes)
 
-// Set a listen port of 8181
-server.serverPort = 8181
+// Set a listen port
+server.serverPort = 12322
+
+// Timer for dailyReport
+//let timer = Timer.init(
+//    fire: Date(),
+//    interval: 3,
+//    repeats: true,
+//    block: {
+//        timer in
+//        let str = FanWaiter.dailyReport()
+//        let curlObject = CURL(url: "127.0.0.1:12322")
+//        curlObject.perform {
+//            code, header, body in
+//            print(code)
+//            print(header)
+//            print(body)
+//        }
+//})
+//let timer = Timer.
 
 do {
     // Launch the HTTP server.
