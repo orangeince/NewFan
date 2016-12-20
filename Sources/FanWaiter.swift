@@ -194,11 +194,11 @@ class FanWaiter {
                     responseStr = report
                     break
                 } else {
-                    responseStr = user + "," + report
+                    responseStr = user + "," + report + "\n" + dailyReport()
                 }
             }
         }
-        return responseStr + "\n" + dailyReport()
+        return responseStr
         //return "\(userName): \(commandStr)"
     }
     
