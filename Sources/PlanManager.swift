@@ -317,17 +317,17 @@ struct PlanManager {
                 return nil
             }
             let (today, weekday) = getFormattedDateOf(Date())
-            if dictContains(intValue: today, ofKey: "exceptExplicitDay", dict: dict) {
-                return nil
-            }
-            if dictContains(intValue: weekday, ofKey: "exceptWeekDay", dict: dict) {
-                return nil
-            }
             if dictContains(intValue: today, ofKey: "explicitDay", dict: dict) {
                 return user
             }
+            if dictContains(intValue: today, ofKey: "exceptExplicitDay", dict: dict) {
+                return nil
+            }
             if dictContains(intValue: weekday, ofKey: "WeekDay", dict: dict) {
                 return user
+            }
+            if dictContains(intValue: weekday, ofKey: "exceptWeekDay", dict: dict) {
+                return nil
             }
             if let eatAtWorkDay = dict["week"] as? Bool,
                 eatAtWorkDay {
