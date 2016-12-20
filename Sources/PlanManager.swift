@@ -79,12 +79,12 @@ struct PlanManager {
     mutating func addWeekPlanFor(_ user: String) -> (Bool, String) {
         if var plan = planDict[user] as? [String: Any] {
             if let hasWeekPlan = plan["week"] as? Bool, hasWeekPlan == true {
-                return (true, "\(user)之前已经订过工作日的计划了哦,我是不会忘哒（＾ω＾）")
+                return (true, "之前已经订过工作日的计划了哦,我是不会忘哒（＾ω＾）")
             } else {
                 plan["week"] = true
                 planDict[user] = plan
                 if save() {
-                    return (true, "\(user)工作日点晚餐的工作就交给智能晚饭君啦 (ง •̀_•́)ง")
+                    return (true, "工作日点晚餐的工作就交给智能晚饭君啦 (ง •̀_•́)ง")
                 } else {
                     return saveFailedReport
                 }
@@ -101,17 +101,17 @@ struct PlanManager {
     mutating func cancelWeekPlanFor(_ user: String) -> (Bool, String) {
         if var plan = planDict[user] as? [String: Any] {
             if plan["week"] == nil || plan["week"]! as! Bool == false {
-                return (true, "哎呦，\(user)之前还没有制定过点饭计划哦 (oﾟωﾟo)")
+                return (true, "哎呦，你之前还没有制定过点饭计划哦 (oﾟωﾟo)")
             }
             plan["week"] = false
             planDict[user] = plan
             if save() {
-                return (true, "已经帮\(user)取消了工作日点饭计划，再来哦 ...(｡•ˇ‸ˇ•｡) ...")
+                return (true, "已经帮你取消了工作日点饭计划，再来哦 ...(｡•ˇ‸ˇ•｡) ...")
             } else {
                 return (false, occurBugReport)
             }
         } else {
-            return (true, "哎呦，\(user)之前还没有制定过点饭计划哦 (oﾟωﾟo)")
+            return (true, "哎呦，你之前还没有制定过点饭计划哦 (oﾟωﾟo)")
         }
     }
     mutating func addWeekDayPlanFor(_ user: String, withDay day: Int) -> (Bool, String) {
