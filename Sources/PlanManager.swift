@@ -209,19 +209,19 @@ struct PlanManager {
     }
     
     mutating func addOffsetDayPlanFor(_ user: String, withOffset offset: Int) -> (Bool, String) {
-        if offset == 0 {
-            return (true, "OK,今天的饭已经帮你点上啦")
-        }
+//        if offset == 0 {
+//            return (true, "OK,今天的饭已经帮你点上啦")
+//        }
         let day = getFormattedDateOffsetOfToday(with: offset)
         let keySuit = PlanKeySuit(planKey: "explicitDay", opposedPlanKey: "exceptExplicitDay")
         return makePlanFor(user, withDay: day, keySuit: keySuit)
     }
     
     mutating func cancelOffsetDayPlanFor(_ user: String, withOffset offset: Int) -> (Bool, String) {
-        if offset == 9999 {
-            return (true, "OK,今天的饭已经帮你取消喽")
-        }
-        let day = getFormattedDateOffsetOfToday(with: offset)
+//        if offset == 9999 {
+//            return (true, "OK,今天的饭已经帮你取消喽")
+//        }
+        let day = getFormattedDateOffsetOfToday(with: offset == 9999 ? 0 : offset)
         let keySuit = PlanKeySuit(planKey: "exceptExplicitDay", opposedPlanKey: "explicitDay")
         return makePlanFor(user, withDay: day, keySuit: keySuit)
     }
@@ -231,8 +231,8 @@ struct PlanManager {
         print("today: \(today)")
         if day < today {
             return (false, "指定的日期是过去的时间哦，请确认日期")
-        } else if day == today {
-            return (true, "ok,今天的饭已经帮你点上了哦")
+//        } else if day == today {
+//            return (true, "ok,今天的饭已经帮你点上了哦")
         }
         let keySuit = PlanKeySuit(planKey: "explicitDay", opposedPlanKey: "exceptExplicitDay")
         return makePlanFor(user, withDay: day, keySuit: keySuit)
@@ -242,8 +242,8 @@ struct PlanManager {
         let today = getFormattedDateOfToday()
         if day < today {
             return (false, "指定的日期是过去的时间哦，请确认日期")
-        } else if day == today {
-            return (true, "ok, 今天的饭已经取消了")
+//        } else if day == today {
+//            return (true, "ok, 今天的饭已经取消了")
         }
         let keySuit = PlanKeySuit(planKey: "exceptExplicitDay", opposedPlanKey: "explicitDay")
         return makePlanFor(user, withDay: day, keySuit: keySuit)
@@ -298,6 +298,48 @@ struct PlanManager {
             }
         }
     }
+    
+    func getTodayPlanReport() -> String {
+        let eaters = planDict.flatMap {
+            (user, plan) -> String? in
+            guard user != "initialized" else {
+                return nil
+            }
+            guard let dict = plan as? [String: Any] else {
+                return nil
+            }
+            let (today, weekday) = getFormattedDateOf(Date())
+            if dictContains(intValue: today, ofKey: "exceptExplicitDay", dict: dict) {
+                return nil
+            }
+            if dictContains(intValue: weekday, ofKey: "exceptWeekDay", dict: dict) {
+                return nil
+            }
+            if dictContains(intValue: today, ofKey: "explicitDay", dict: dict) {
+                return user
+            }
+            if dictContains(intValue: weekday, ofKey: "WeekDay", dict: dict) {
+                return user
+            }
+            if let eatAtWorkDay = dict["week"] as? Bool,
+                eatAtWorkDay {
+                return user
+            }
+            return nil
+        }
+        if eaters.count == 0 {
+            return "今晚无人问津晚饭君"
+        }
+        return "今晚翻了晚饭君牌子的是: \n" + eaters.joined(separator: ",")
+    }
+    
+    func dictContains(intValue: Int, ofKey: String, dict: [String: Any]) -> Bool {
+        if let intArr = dict[ofKey] as? [Int],
+            intArr.contains(intValue) {
+            return true
+        }
+        return false
+    }
 }
 
 
@@ -324,7 +366,13 @@ func getDespOf(weekday: Int) -> String {
 
 func getFormattedDateOf(_ date: Date) -> (Int, Int) {
     let dateComponents = Calendar.current.dateComponents([.day, .month, .weekday], from: date)
-    return (dateComponents.month! * 100 + dateComponents.day!, dateComponents.weekday!)
+    var weekday = dateComponents.weekday!
+    if weekday == 1 {
+        weekday = 7
+    } else {
+        weekday -= 1
+    }
+    return (dateComponents.month! * 100 + dateComponents.day!, weekday)
 }
 
 func getFormattedDateOfToday() -> Int {

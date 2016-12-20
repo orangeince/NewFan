@@ -137,6 +137,8 @@ enum CommandMode {
         print("commandMode Init  commandStr:\(commandStr)")
         if commandStr == "help" {
             self = .help
+        } else if commandStr == "list" {
+            self = .list
         } else if let command = FanCommand.getCommandFrom(str: commandStr) {
             self = .fanPlan(command)
         } else {
@@ -165,6 +167,8 @@ class FanWaiter {
                 isHelpOthers = true
             case .fanPlan(let cmd):
                 commands.append(cmd)
+            case .list:
+                return dailyReport()
             default:
                 if isHelpOthers {
                     others.append(commandStr)
@@ -187,10 +191,10 @@ class FanWaiter {
             for cmd in commands {
                 let (success, report) = cmd.executedReport(user: user)
                 if !success {
-                    responseStr = user + "," + report
+                    responseStr = report
                     break
                 } else {
-                    responseStr = report
+                    responseStr = user + "," + report
                 }
             }
         }
@@ -199,6 +203,9 @@ class FanWaiter {
     }
     
     static func dailyReport() -> String {
-        return "fan!"
+        guard let planManager = PlanManager() else {
+            return "暂时没有任何点饭计划"
+        }
+        return planManager.getTodayPlanReport()
     }
 }
