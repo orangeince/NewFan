@@ -17,21 +17,31 @@ routes.add(method: .get, uri: "/", handler: {
 }
 )
 
+routes.add(method: .get, uri: "/today/", handler: {
+    request, response in
+    //response.setHeader(.contentType, value: "text/html")
+    if let planManager = PlanManager() {
+        let eaters = planManager.getTodayEaters()
+        response.appendBody(string: eaters.joined(separator: ","))
+    } else {
+        response.appendBody(string: "")
+    }
+    response.completed()
+}
+)
+
 routes.add(method: .post, uri: "/fan/", handler: {
     request, response in
     if let bodyStr = request.postBodyString {
         print("body: \(bodyStr)")
         if let json = (try? bodyStr.jsonDecode()) as? [String: Any] {
-            print("Post json correct! ^_^")
             if let text = json["text"] as? String, let userName = json["user_name"] as? String {
-                let responseString = FanWaiter.handleFanPlanWith(commandStr: text, userName: userName)
+                let responseString = FanWaiter.handleFanPlanWith(commandStr: text.trim(), userName: userName)
                 response.appendBody(string: "{\"text\": \"\(responseString)\"}")
             } else {
-                print("Data paramaters invaild!")
                 response.appendBody(string: "Data invaild!")
             }
         } else {
-            print("Post json invaild!")
             response.appendBody(string: "post params invaild!")
         }
     } else {

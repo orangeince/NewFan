@@ -300,7 +300,15 @@ struct PlanManager {
     }
     
     func getTodayPlanReport() -> String {
-        let eaters = planDict.flatMap {
+        let eaters = getTodayEaters()
+        if eaters.count == 0 {
+            return "今晚无人问津晚饭君"
+        }
+        return "今晚翻了晚饭君牌子的是: \n" + eaters.joined(separator: ",")
+    }
+    
+    func getTodayEaters() -> [String] {
+        return planDict.flatMap {
             (user, plan) -> String? in
             guard user != "initialized" else {
                 return nil
@@ -327,10 +335,6 @@ struct PlanManager {
             }
             return nil
         }
-        if eaters.count == 0 {
-            return "今晚无人问津晚饭君"
-        }
-        return "今晚翻了晚饭君牌子的是: \n" + eaters.joined(separator: ",")
     }
     
     func dictContains(intValue: Int, ofKey: String, dict: [String: Any]) -> Bool {

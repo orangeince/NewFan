@@ -27,7 +27,7 @@ infix operator =~: AdditionPrecedence
 
 func =~(lhs: String, rhs: String) -> Bool {
     do {
-        print("lhs: \(lhs), rhs: \(rhs)")
+        //print("lhs: \(lhs), rhs: \(rhs)")
         return try RegexHelper(rhs).match(input: lhs)
     } catch _ {
         return false

@@ -147,7 +147,7 @@ enum CommandMode {
     }
 }
 
-let commandHelpStr = "**偶尔忘记点饭而挨饿?忘记取消点饭而浪费粮食?让智能晚饭君来拯救你**\n**自从有了智能晚饭君，麻麻再也不用担心我的晚饭啦。**\n**晚饭君使用指南:**" + "\n- `fan ++` or `fan --`    每个工作日自动点饭 or 不自动点饭 \n- `fan +n` or `fan -n`    n = [1, 5] 每周n点饭 or 不点饭  例如: fan +1\n- `fan +今天` or `fan -今天`    明天点饭 or 不点饭\n- `fan +明天` or `fan -明天`    明天点饭 or 不点饭\n- `fan +后天` or `fan -后天`    后天点饭 or 不点饭\n- `fan +大后天` or `fan -大后天`    大后天点饭 or 不点饭\n- `fan +大大后天` or `fan -大大后天`    大大后天点饭 or 不点饭\n- `fan +Month.day` or `fan -Month.day`    Month.day那天点饭 or 不点饭\n- `fan XX help 某某`    帮某某自动点饭或者取消点饭 XX为以上任意命令"
+let commandHelpStr = "**偶尔忘记点饭而挨饿?忘记取消点饭而浪费粮食?让智能晚饭君来拯救你**\n**自从有了智能晚饭君，麻麻再也不用担心我的晚饭啦。**\n**晚饭君使用指南:**" + "\n- `fan ++` or `fan --`    每个工作日自动点饭 or 不自动点饭 \n- `fan +n` or `fan -n`    n = [1, 5] 每周n点饭 or 不点饭  例如: fan +1\n- `fan +今天` or `fan -今天`    明天点饭 or 不点饭\n- `fan +明天` or `fan -明天`    明天点饭 or 不点饭\n- `fan +后天` or `fan -后天`    后天点饭 or 不点饭\n- `fan +大后天` or `fan -大后天`    大后天点饭 or 不点饭\n- `fan +大大后天` or `fan -大大后天`    大大后天点饭 or 不点饭\n- `fan +Month.day` or `fan -Month.day`    Month.day那天点饭 or 不点饭\n- `fan XX help 某某`    帮某某自动点饭或者取消点饭 XX为以上任意命令\n- `fan list` 查看今天点了晚饭的人"
 
 class FanWaiter {
     static func handleFanPlanWith(commandStr: String, userName: String) -> String {
