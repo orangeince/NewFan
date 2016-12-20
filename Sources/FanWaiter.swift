@@ -198,7 +198,7 @@ class FanWaiter {
                 }
             }
         }
-        return responseStr
+        return responseStr + "\n" + dailyReport()
         //return "\(userName): \(commandStr)"
     }
     
