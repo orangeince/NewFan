@@ -187,7 +187,7 @@ class FanWaiter {
             for cmd in commands {
                 let (success, report) = cmd.executedReport(user: user)
                 if !success {
-                    responseStr = report
+                    responseStr = user + "," + report
                     break
                 } else {
                     responseStr = report
